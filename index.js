@@ -116,7 +116,7 @@ async function main() {
   await setupEnvFiles(targetDir);
 
   // Run additional commands
-  runCommand('npm install next-auth@beta nodemailer');
+  runCommand('npm install next-auth@beta nodemailer bcryptjs');
   runCommand('npx shadcn@latest init');
   runCommand('npx shadcn@latest add accordion avatar button card dropdown-menu input label separator toast');
   runCommand('npm install @prisma/client @auth/prisma-adapter');
@@ -125,12 +125,14 @@ async function main() {
 
   // Provide next steps to the user
   console.log(`
+  ---------------------------------------------------------------------------------------------------------------------------------\n
   Next steps:
-  1. Run  command \`openssl rand -base64 32\` to generate the env key.
+  1. Run  command \`openssl rand -base64 32\` to generate the secret key.
   2. Add the generated secret key, OAuth provider keys, and email provider to the .env.local file.
   3. Add the OAuth providers in @/auth/provider.js file.
   4. Copy prisma schema according to your database (postgres or mongodb) available in the _schemas directory and paste it into the prisma/schema.prisma file
   5. Run command \`npx prisma migrate dev\` to migrate prisma db
+  6. Add \` "./src/auth/ui/**/*.{js,ts,jsx,tsx,mdx}",\` to the taiwind.config.js content array to ensure styling to the auth components 
 
   Authentication is set up in your project! For more details, read the documentation at https://github.com/Decodam/nextsecure#readme
   `);
