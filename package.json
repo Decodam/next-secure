@@ -1,0 +1,19 @@
+{
+  "name": "next-secure",
+  "version": "1.0.0",
+  "description": "A CLI tool to add authentication to a Next.js project",
+  "main": "index.js",
+  "bin": {
+    "next-secure": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "path": "^0.12.7",
+    "child_process": "^1.0.2"
+  }
+}
