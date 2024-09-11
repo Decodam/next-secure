@@ -49,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         // Return the user object if everything is valid
-        return { id: user.id, email: user.email, name: user.name };
+        return { id: user.id, email: user.email, name: user.name, role: user.role };
       },
       credentials: {
         email: { label: "Email", type: "text" },

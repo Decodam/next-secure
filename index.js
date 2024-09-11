@@ -47,6 +47,22 @@ async function copySrc(targetDir) {
   }
 }
 
+// Function to check if "icon.png" exists in the public directory
+async function copyPublic(targetDir) {
+  const targetPublicDir = path.join(targetDir, 'public');
+  const targetIconPath = path.join(targetPublicDir, 'icon.png');
+
+  try {
+    if (await fs.pathExists(targetIconPath)) {
+      console.log('"icon.png" already exists in "public" directory. Skipping copy.');
+    } else {
+      await copyDirectory(publicDir, targetPublicDir);
+    }
+  } catch (err) {
+    console.error('Error handling "public" directory:', err);
+  }
+}
+
 // Function to create or update .env and .env.local files
 async function setupEnvFiles(targetDir) {
   const envLocalPath = path.join(targetDir, '.env.local');
@@ -110,14 +126,21 @@ async function main() {
     process.exit(1);
   }
 
-  await copyDirectory(publicDir, path.join(targetDir, 'public'));
+  await copyPublic(targetDir);  // Check and copy public directory if needed
   await copyDirectory(schemasDir, path.join(targetDir, '_schemas'));
   await copySrc(targetDir);
   await setupEnvFiles(targetDir);
 
+  // Check if components.json exists
+  const componentsJsonPath = path.join(targetDir, 'components.json');
+  if (!await fs.pathExists(componentsJsonPath)) {
+    runCommand('npx shadcn@latest init');
+  } else {
+    console.log('components.json already exists. Skipping "npx shadcn init".');
+  }
+
   // Run additional commands
   runCommand('npm install next-auth@beta nodemailer bcryptjs');
-  runCommand('npx shadcn@latest init');
   runCommand('npx shadcn@latest add accordion avatar button card dropdown-menu input label separator toast');
   runCommand('npm install @prisma/client @auth/prisma-adapter');
   runCommand('npm install prisma --save-dev');
