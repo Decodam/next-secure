@@ -117,6 +117,34 @@ function runCommand(command) {
   }
 }
 
+// Function to update tailwind.config.js
+async function updateTailwindConfig(targetDir) {
+  const tailwindConfigPath = path.join(targetDir, 'tailwind.config.js');
+
+  try {
+    if (await fs.pathExists(tailwindConfigPath)) {
+      const configContent = await fs.readFile(tailwindConfigPath, 'utf-8');
+
+      // Check if the line is already present
+      if (!configContent.includes('"./src/auth/ui/**/*.{js,ts,jsx,tsx,mdx}"')) {
+        const updatedConfigContent = configContent.replace(
+          /(content:\s*\[.*?)(\s*\],)/s,
+          '$1\n    "./src/auth/ui/**/*.{js,ts,jsx,tsx,mdx}",$2'
+        );
+
+        await fs.writeFile(tailwindConfigPath, updatedConfigContent, 'utf-8');
+        console.log('Updated tailwind.config.js with auth UI paths');
+      } else {
+        console.log('tailwind.config.js already contains auth UI paths. Skipping update.');
+      }
+    } else {
+      console.error('tailwind.config.js not found. Skipping update.');
+    }
+  } catch (err) {
+    console.error('Error updating tailwind.config.js:', err);
+  }
+}
+
 // Main function
 async function main() {
   const targetDir = process.argv[2] || '.';
@@ -130,6 +158,7 @@ async function main() {
   await copyDirectory(schemasDir, path.join(targetDir, '_schemas'));
   await copySrc(targetDir);
   await setupEnvFiles(targetDir);
+  await updateTailwindConfig(targetDir);
 
   // Check if components.json exists
   const componentsJsonPath = path.join(targetDir, 'components.json');
@@ -155,8 +184,7 @@ async function main() {
   3. Add the OAuth providers in @/auth/provider.js file.
   4. Copy prisma schema according to your database (postgres or mongodb) available in the _schemas directory and paste it into the prisma/schema.prisma file
   5. Run command \`npx prisma migrate dev\` to migrate prisma db
-  6. Add \` "./src/auth/ui/**/*.{js,ts,jsx,tsx,mdx}",\` to the taiwind.config.js content array to ensure styling to the auth components 
-
+  
   Authentication is set up in your project! For more details, read the documentation at https://github.com/Decodam/nextsecure#readme
   `);
 }

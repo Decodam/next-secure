@@ -1,6 +1,6 @@
 {
   "name": "next-secure",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A CLI tool to add authentication to a Next.js project",
   "main": "index.js",
   "bin": {
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Your Name",
+  "author": "Arghya Mondal",
   "license": "ISC",
   "dependencies": {
     "fs-extra": "^10.0.0",

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { cn } from "@/lib/shadcn";
+import { cn } from "@/lib/utils";
 
 
 const PasswordInput = React.forwardRef(({ className, passwordScore, ...props }, ref) => {
